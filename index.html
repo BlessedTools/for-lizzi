@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title> Для Lizочки ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* центр */
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* кнопки */
+button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 20px;
+    background: #ff4d6d;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #ff1f4b;
+}
+
+/* затемнение */
+#fade {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: 1s;
+    z-index: 5;
+}
+
+/* видео */
+#videoBlock {
+    display: none;
+    z-index: 10;
+}
+
+video {
+    width: 80%;
+    max-width: 650px;
+    border-radius: 20px;
+    box-shadow: 0 0 60px rgba(255,0,100,0.7);
+}
+
+/* анимация текста */
+.typing {
+    border-right: 2px solid white;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+}
+
+/* сердечки <3 <3 <3 */
+.heart {
+    position: absolute;
+    animation: float linear infinite;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+
+/* Лизочка */
+.name {
+    position: absolute;
+    font-weight: bold;
+    opacity: 0.7;
+    animation: float linear infinite;
+}
+</style>
+</head>
+
+<body>
+
+<div id="fade"></div>
+
+<!-- первая страничка -->
+<div id="startScreen" class="center">
+    <h1 class="typing" id="title"></h1>
+    <br><br>
+    <button onclick="showMessage()">Открыть</button>
+</div>
+
+<!-- вторая страничкааа -->
+<div id="message" class="center" style="display:none;">
+    <h2 class="typing" id="text"></h2>
+    <br><br>
+    <button onclick="playVideo()">Смотреть</button>
+</div>
+
+<!-- виновник торжества  -->
+<div id="videoBlock" class="center">
+    <video id="video" controls>
+        <source src="cut.mp4" type="video/mp4">
+    </video>
+</div>
+
+<script>
+// типо крутой печатающийся текст
+function typeText(element, text, speed = 50) {
+    let i = 0;
+    element.innerHTML = "";
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        }
+    }
+    typing();
+}
+
+// тут я запускаю печать и вывод текста
+typeText(document.getElementById("title"), "Special for YoU, Lizочка ❤️", 70);
+
+function showMessage() {
+    document.getElementById("startScreen").style.display = "none";
+    let msg = document.getElementById("message");
+    msg.style.display = "block";
+
+    typeText(document.getElementById("text"),
+    "Мне хотелось сделать для тебя что-то особенное и приятное ❤️", 50);
+}
+
+// видосик, он же виновник торжества
+function playVideo() {
+    let fade = document.getElementById("fade");
+    fade.style.opacity = 1;
+
+    setTimeout(() => {
+        document.getElementById("message").style.display = "none";
+        document.getElementById("videoBlock").style.display = "block";
+
+        let video = document.getElementById("video");
+        video.play();
+
+        fade.style.opacity = 0;
+
+        startEffects();
+    }, 1000);
+}
+
+// нихуевые эффекты 
+function startEffects() {
+    setInterval(() => {
+
+        // сердчки <3 <3 <3
+        const colors = ["red", "yellow", "yellow", "white", "yellow", "yellow"];
+
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤";
+        heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (10 + Math.random() * 30) + "px";
+        heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 8000);
+
+        // Лизочка
+        const name = document.createElement("div");
+        name.className = "name";
+        name.innerHTML = "Лизочка";
+        name.style.left = Math.random() * 100 + "vw";
+        name.style.fontSize = (12 + Math.random() * 20) + "px";
+        name.style.color = "rgba(255,255,255,0.6)";
+        name.style.animationDuration = (4 + Math.random() * 6) + "s";
+
+        document.body.appendChild(name);
+        setTimeout(() => name.remove(), 9000);
+
+    }, 200);
+}
+</script>
+
+</body>
+</html>
