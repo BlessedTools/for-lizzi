@@ -452,10 +452,36 @@ function updateLoveCounter() {
     const el = document.getElementById("loveCounter");
     if (el) {
         el.innerText =
-            `💞 ${days} дн. ${hours} ч. ${minutes} мин. ${seconds} сек. вместе 💞`;
+            `💛 Мы знакомы: ${days} дн. ${hours} ч. ${minutes} мин. ${seconds} сек. 💛`;
     }
 }
+// 🆕 Таймер отношений (пока отключён)
+function updateRelationCounter() {
+    // ❗ ВСТАВИШЬ ДАТУ КОГДА НАЧНЁТЕ ВСТРЕЧАТЬСЯ
+    const relationStart = null; // например: "2026-04-01T20:00:00"
 
+    if (!relationStart) return; // пока нет даты — ничего не показываем
+
+    const startDate = new Date(relationStart);
+    const now = new Date();
+
+    let diff = Math.floor((now - startDate) / 1000);
+
+    const days = Math.floor(diff / (3600 * 24));
+    diff %= (3600 * 24);
+
+    const hours = Math.floor(diff / 3600);
+    diff %= 3600;
+
+    const minutes = Math.floor(diff / 60);
+    const seconds = diff % 60;
+
+    const el = document.getElementById("loveCounter");
+    if (el) {
+        el.innerText +=
+            `\n💞 Мы вместе: ${days} дн. ${hours} ч. ${minutes} мин. ${seconds} сек. 💞`;
+    }
+}
 function playVideo() {
     let fade = document.getElementById("fade");
     fade.style.opacity = 1;
@@ -556,11 +582,13 @@ let events = [
 function loadEvents() {
     renderEvents();
     updateLoveCounter();
-    setInterval(updateLoveCounter, 1000);
-}
+    checkSpecialDay();
+    updateRelationCounter(); // 🆕
 
-function saveEvents() {
-    // теперь ничего не сохраняем
+    setInterval(() => {
+        updateLoveCounter();
+        updateRelationCounter(); // 🆕
+    }, 1000);
 }
 
 // Функция конфетти (WoW эффект)
