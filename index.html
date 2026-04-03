@@ -388,20 +388,19 @@
 
     // ---------- ПЛАВАЮЩИЕ СЕРДЕЧКИ, ЗВЁЗДЫ, ЛИЗОЧКИ ----------
     function startEffects() {
-      setInterval(() => {
-        // сердечко с разными цветами (включая жёлтый)
+    setInterval(() => {
         const colors = ["red", "gold", "yellow", "white", "orange", "hotpink", "#ffcc00"];
         const heart = document.createElement("div");
         heart.className = "heart";
-        heart.innerHTML = "❤️";
+        heart.innerHTML = "♥";   // ← заменил эмодзи на символ
         heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+        heart.style.textShadow = "0 0 5px currentColor";
         heart.style.left = Math.random() * 100 + "vw";
         heart.style.fontSize = (10 + Math.random() * 30) + "px";
         heart.style.animationDuration = (3 + Math.random() * 5) + "s";
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 8000);
 
-        // надпись "Лизочка"
         const name = document.createElement("div");
         name.className = "name";
         name.innerHTML = "Лизочка";
@@ -412,7 +411,6 @@
         document.body.appendChild(name);
         setTimeout(() => name.remove(), 9000);
 
-        // звёздочка
         const star = document.createElement("div");
         star.className = "star";
         star.innerHTML = "⭐";
@@ -424,7 +422,6 @@
         setTimeout(() => star.remove(), 8000);
     }, 180);
 }
-
     // ---------- КОНФЕТТИ ----------
     function burstConfetti() {
         for (let i = 0; i < 70; i++) {
@@ -480,6 +477,42 @@
             el.innerText = `💛 Мы знакомы: ${days} дн. ${hours} ч. ${minutes} мин. ${seconds} сек. 💛`;
         }
     }
+    // 🆕 Счётчик отношений 
+function updateRelationCounter() {
+    // ❗ "DATE 2026-04-01T20:00:00"
+    const relationStart = null;
+    
+    if (!relationStart) return; 
+
+    const startDate = new Date(relationStart);
+    const now = new Date();
+    let diff = Math.floor((now - startDate) / 1000);
+    const days = Math.floor(diff / (3600 * 24));
+    diff %= (3600 * 24);
+    const hours = Math.floor(diff / 3600);
+    diff %= 3600;
+    const minutes = Math.floor(diff / 60);
+    const seconds = diff % 60;
+
+    // Найдём элемент, куда выводить 
+    let el = document.getElementById("relationCounter");
+    if (!el) {
+        // Если такого элемента нет — создадим его под loveCounter
+        const loveDiv = document.getElementById("loveCounter");
+        if (loveDiv && !document.getElementById("relationCounter")) {
+            const newDiv = document.createElement("div");
+            newDiv.id = "relationCounter";
+            newDiv.style.fontSize = "14px";
+            newDiv.style.color = "#ffb3c1";
+            newDiv.style.marginTop = "5px";
+            loveDiv.parentNode.insertBefore(newDiv, loveDiv.nextSibling);
+            el = newDiv;
+        }
+    }
+    if (el) {
+        el.innerText = `💞 Мы вместе: ${days} дн. ${hours} ч. ${minutes} мин. ${seconds} сек. 💞`;
+    }
+}
 
     function renderEvents() {
         const tbody = document.getElementById("eventsTbody");
@@ -619,7 +652,10 @@
     renderAlbum();
     updateLoveCounter();
     checkSpecialDay();
-    setInterval(updateLoveCounter, 1000);
+  setInterval(() => {
+    updateLoveCounter();
+    updateRelationCounter();
+    }, 1000);
 
     // эффект свечения при воспроизведении видео
     const videoElem = document.getElementById("video");
